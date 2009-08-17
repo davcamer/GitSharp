@@ -36,9 +36,6 @@
  */
 
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace GitSharp.Util
 {
@@ -75,11 +72,14 @@ namespace GitSharp.Util
         /// </summary>
         /// <param name="time"></param>
         /// <returns></returns>
-        public static DateTimeOffset GitTimeToDateTimeOffset(this long gittime, long offset_minutes)
+        public static DateTimeOffset GitTimeToDateTimeOffset(this long gittime, long offset_where_hundreds_are_hours_and_remainder_is_minutes)
         {
-            var offset = TimeSpan.FromMinutes(offset_minutes);
-            var utc_ticks = EPOCH_TICKS + gittime * TICKS_PER_SECOND;
-            return new DateTimeOffset(utc_ticks + offset.Ticks, offset);
+            var hours = ((int) offset_where_hundreds_are_hours_and_remainder_is_minutes)/100;
+            var minutes = ((int) offset_where_hundreds_are_hours_and_remainder_is_minutes)%100;
+            var offset = new TimeSpan(hours, minutes, 0);
+            var utc_ticks = EPOCH_TICKS + gittime * TimeSpan.TicksPerSecond;
+            var utc_time = new DateTimeOffset(utc_ticks, TimeSpan.Zero);
+            return utc_time.ToOffset(offset);
         }
 
         /// <summary>

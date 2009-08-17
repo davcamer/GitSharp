@@ -100,13 +100,13 @@ namespace GitSharp.Tests
         }
 
         [Test]
-        public void OffsetIsInterpretedAsHoursAndMinutes()
+        public void OffsetIsPassedInMinutes()
         {
-            var epochInMountainTime = (0L).GitTimeToDateTimeOffset(-700);
+            var epochInMountainTime = (0L).GitTimeToDateTimeOffset(-7 * 60);
             Assert.AreEqual(-7, epochInMountainTime.Offset.Hours);
             Assert.AreEqual(0, epochInMountainTime.Offset.Minutes);
 
-            var epochInChathamIslands = (0L).GitTimeToDateTimeOffset(+1245);
+            var epochInChathamIslands = (0L).GitTimeToDateTimeOffset(12 * 60 + 45);
             Assert.AreEqual(12, epochInChathamIslands.Offset.Hours);
             Assert.AreEqual(45, epochInChathamIslands.Offset.Minutes);
         }
